@@ -22,19 +22,8 @@ pkgs.python3Packages.buildPythonApplication {
 
     # Build
     setuptools
+    ebooklib
 
-    (buildPythonPackage rec {
-      pname = "EbookLib";
-      version = "0.18";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "sha256-OFYmQ6e8lNm/VumTC0kn5Ok7XR0JF/aXpkVNtaHBpTM=";
-      };
-      propagatedBuildInputs = [
-        six
-        lxml
-      ];
-    })
 
     (buildPythonPackage rec {
       pname = "blackboxprotobuf";
