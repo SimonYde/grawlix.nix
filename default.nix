@@ -37,7 +37,8 @@ pkgs.python3Packages.buildPythonApplication {
       propagatedBuildInputs = [ protobuf ];
 
       patchPhase = ''
-        sed 's/protobuf==3.10.0/protobuf/' requirements.txt > requirements.txt
+        substituteInPlace ./requirements.txt \
+        --replace "protobuf==3.10.0" "protobuf"
       '';
 
       doCheck = false;
