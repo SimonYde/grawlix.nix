@@ -3,11 +3,31 @@
   lib,
   grawlix,
 }:
+let
+  inherit (lib) concatStringsSep substring;
+
+  mkDate =
+    longDate:
+    (concatStringsSep "-" [
+      (substring 0 4 longDate)
+      (substring 4 2 longDate)
+      (substring 6 2 longDate)
+    ]);
+
+  date = mkDate (grawlix.lastModifiedDate or "19700101");
+in
 pkgs.python3Packages.buildPythonApplication {
   pname = "grawlix";
-  version = "2024-10-02";
+  version = "${date}_${grawlix.shortRev or "dirty"}";
 
   src = grawlix;
+
+  pyproject = true;
+
+  build-system = with pkgs.python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = with pkgs.python3Packages; [
     appdirs
@@ -24,10 +44,16 @@ pkgs.python3Packages.buildPythonApplication {
     setuptools
     ebooklib
 
-
     (buildPythonPackage rec {
       pname = "blackboxprotobuf";
       version = "1.0.1";
+
+      pyproject = true;
+
+      build-system = with pkgs.python3Packages; [
+        setuptools
+        setuptools-scm
+      ];
 
       src = fetchPypi {
         inherit pname version;
